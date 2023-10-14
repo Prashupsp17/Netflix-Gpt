@@ -2,7 +2,6 @@ import React from 'react'
 import Header from './Header'
 import { useState ,useRef} from 'react';
 import {checkValidateData} from "../utils/validate";
-import { useNavigate } from 'react-router-dom'
 import {createUserWithEmailAndPassword ,signInWithEmailAndPassword,updateProfile } from "firebase/auth";
 import { auth} from '../utils/firebase';
 import { useDispatch } from 'react-redux';
@@ -10,7 +9,6 @@ import {addUser} from  "../utils/userSlice";
 
 const Login = () => {
   
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage,setErrorMessage] = useState(null);
@@ -24,7 +22,9 @@ const Login = () => {
   }
 
   const handleClickButton = () => {
-    console.log("HI");
+    // console.log(name.current.value);
+    // console.log(email.current.value);
+    // console.log(password.current.value);
     const message = checkValidateData(email.current.value,password.current.value);
     setErrorMessage(message);
 
@@ -36,37 +36,32 @@ const Login = () => {
          email.current.value,
          password.current.value)
         .then((userCredential) => {
-          const {uid,email, displayName,photoURL} = auth.currentUser;
+          const user = userCredential.user;
+          updateProfile(auth.currentUser, {
+            displayName:name.current.value,
+             photoURL: "https://www.livemint.com/lm-img/img/2023/09/21/600x338/Indian_Jersey_1695302184673_1695302194422.jpg"
+          }).then(() => {
+             const {uid,email, displayName,photoURL} = auth.currentUser;
           dispatch
           (addUser({
             uid:uid,
             email:email,
             displayName:displayName,
             photoURL:photoURL}));
-          const user = userCredential.user;
-          updateProfile(auth.currentUser, {
-            displayName:name.current.value,
-             photoURL: "https://www.livemint.com/lm-img/img/2023/09/21/600x338/Indian_Jersey_1695302184673_1695302194422.jpg"
-          }).then(() => {
-            navigate("/browse");
           }).catch((error) => {
-            
             setErrorMessage(message);
           });
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           setErrorMessage(errorCode + "-" + errorMessage);
-          // ..
         });
     }else{
       signInWithEmailAndPassword(auth, email.current.value,password.current.value)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    navigate("/browse");
     // ...
   })
   .catch((error) => {
@@ -87,7 +82,7 @@ const Login = () => {
          onSubmit={(e)=> e.preventDefault()} 
         className='w-3/12 absolute p-12 bg-black my-28 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80'>
           <h1 className="text-3xl font-bold py-4">{isSignInForm ? "Sign In"  : "Sign Up"}</h1>
-          {!isSignInForm  && <input type="text" placeholder='Full Name' className="p-4 my-4 w-full bg-gray-700" />}
+          {!isSignInForm  && <input type="text" ref={name} placeholder='Full Name' className="p-4 my-4 w-full bg-gray-700" />}
           <input type="text" ref={email}  placeholder='Email Address' className="p-4 my-4 w-full bg-gray-700" />
        
           <input type="password" ref={password} placeholder="Password" className="p-4 my-4 w-full bg-gray-700" />
