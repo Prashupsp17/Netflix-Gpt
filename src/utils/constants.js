@@ -5,9 +5,9 @@ export const API_OPTIONS =  {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYzVjNWQ3ZTIxZWIzODA5M2M3ZjY4NDE4ZmI3MmM3MyIsInN1YiI6IjY1MjI4YjRhZWE4NGM3MDBlYjlkYmVlNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aSNvfrng9A_yBjPV7n8A_coKy3G84sZBlmkPlygg3Xk'
-    }
-  };
+      Authorization: "Bearer " + process.env.REACT_APP_TMDB_KEY,
+  }
+};
 
   export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -27,3 +27,7 @@ export const API_OPTIONS =  {
       name:"Spanish",
     }
   ]
+
+  // Used fathers Chat Gpt Login
+  export const OPENAPI_KEY = process.env.REACT_APP_OPENAI_KEY;
+  
