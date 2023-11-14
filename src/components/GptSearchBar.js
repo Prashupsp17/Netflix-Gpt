@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import lang from "../utils/languageConstants";
 import { useDispatch, useSelector } from 'react-redux';
 import { useRef } from 'react';
@@ -10,16 +10,21 @@ const GptSearchBar = () => {
 const dispatch = useDispatch();
     const langKey =  useSelector(store =>store.config.lang);
     const searchText = useRef(null);
+    const [response, setResponse] = useState([]);
+    const [loading,setLoading] = useState(false);
 
     const searchMovieTMDB = async (movie) => {
       const data = await fetch(`https://api.themoviedb.org/3/search/movie?query="
       ${movie}
      &include_adult=false&language=en-US&page=1`, API_OPTIONS);
        const json = await data.json();
+       setResponse(json.results);
+       setLoading(false);
 
        return json.results;
     }
     const handleGptSearchClick = async () => {
+      setLoading(true);
 // Make an API call to get the movie results
 
 const gptQuery = 
@@ -36,7 +41,7 @@ const gptQuery =
     console.error("error");
   }
 
-  console.log(gptResults.choices?.[0]?.message?.content);
+  // console.log(gptResults.choices?.[0]?.message?.content);
   const gptMovies = gptResults.choices?.[0]?.message?.content.split(",");
 
   // Andaz Apna Apna, Chupke Chupke, Padosan, Angoor, Hera Pheri
@@ -46,6 +51,7 @@ const gptQuery =
   const promiseArray = gptMovies.map(movie => searchMovieTMDB(movie));
 
   const tmdbResults = await Promise.all(promiseArray);
+
  dispatch(addGptMovieResult({movienames : gptMovies, movieResults : tmdbResults}));
 // console.log(tmdbResults);
 
@@ -53,19 +59,23 @@ const gptQuery =
     }
 
   return (
-      <div className="pt-[10%] flex justify-center">
-    <form className=' w-1/2 bg-black grid grid-cols-12 ' onSubmit={(e) => e.preventDefault()}>
+    <>
+      <div className="pt-[35%] pt-[30%] md:pt-[10%] flex justify-center">
+    <form className='w-full md:w-1/2 bg-black grid grid-cols-12 ' onSubmit={(e) => e.preventDefault()}>
         <input 
         ref={searchText} 
         className='m-4 p-4 col-span-9'
         type='text'
         placeholder={lang[langKey].gptSearchPlaceholder}
         />
-        <button className='py-2 px-4 m-4 col-span-3 bg-red-800 text-white rounded-lg ' onClick={handleGptSearchClick}>
+        <button className='py-2 px-2 m-4 col-span-3 bg-red-800 text-white rounded-lg ' onClick={handleGptSearchClick}>
             {lang[langKey].search}
         </button>
     </form>
     </div>
+    {loading  ? <h1 className="text-3xl text-white flex justify-center">Loading....</h1> :""}
+     </>
+
   )
 }
 
