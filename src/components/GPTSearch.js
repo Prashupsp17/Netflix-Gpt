@@ -2,7 +2,6 @@ import React from 'react'
 import { BG_URL } from '../utils/constants'
 import GptMovieSuggestion from './GptMovieSuggestion'
 import GptSearchBar from './GptSearchBar'
-import {useSelector} from 'react-redux';
 
 const GPTSearch = () => {
   return (

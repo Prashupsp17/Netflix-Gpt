@@ -46,7 +46,7 @@ const showGptSearch = useSelector(store => store.gpt.showGptSearch);
       return () => {
         unsubscribe();
       } 
-},[]); 
+}, [dispatch, navigate]); 
 
 const handleGptSearchClick = () => {
 dispatch(toggleGptSearchView());

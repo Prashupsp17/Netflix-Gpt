@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
 import { useSearchParams } from 'react-router-dom';
 import { API_OPTIONS } from '../utils/constants';
 import { LOGO } from '../utils/constants';
@@ -17,7 +16,6 @@ const WatchPage = () => {
       API_OPTIONS
     );
     const json = await data.json();
-    console.log(json);
 
     const filterData = json.results.filter((video) => video.type === 'Trailer');
     // console.log(filterData);
@@ -28,7 +26,7 @@ const WatchPage = () => {
 
   useEffect(() => {
     getTrailer();
-  }, []);
+  },  [searchParams]);
 
   return (
     <>

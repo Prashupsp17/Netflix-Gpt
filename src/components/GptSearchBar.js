@@ -4,13 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRef } from 'react';
 import openai from '../utils/openai';
 import { API_OPTIONS } from '../utils/constants';
-import { json } from 'react-router-dom';
 import { addGptMovieResult } from '../utils/gptSlice';
+
 const GptSearchBar = () => {
 const dispatch = useDispatch();
     const langKey =  useSelector(store =>store.config.lang);
     const searchText = useRef(null);
-    const [response, setResponse] = useState([]);
     const [loading,setLoading] = useState(false);
 
     const searchMovieTMDB = async (movie) => {
@@ -18,7 +17,6 @@ const dispatch = useDispatch();
       ${movie}
      &include_adult=false&language=en-US&page=1`, API_OPTIONS);
        const json = await data.json();
-       setResponse(json.results);
        setLoading(false);
 
        return json.results;

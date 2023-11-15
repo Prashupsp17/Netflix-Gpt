@@ -1,7 +1,7 @@
 import React from 'react'
 import Browse from './Browse'
 import Login from './Login'
-import { createBrowserRouter, useNavigate } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import {RouterProvider} from 'react-router-dom'
 import WatchPage from './WatchPage'
 

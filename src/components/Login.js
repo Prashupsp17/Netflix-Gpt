@@ -33,7 +33,7 @@ const Login = () => {
     if (!isSignInForm) {
       createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then((userCredential) => {
-          const user = userCredential.user;
+          // const user = userCredential.user;
           updateProfile(auth.currentUser, {
             displayName: name.current.value,
             photoURL: 'https://i.pinimg.com/474x/5b/50/e7/5b50e75d07c726d36f397f6359098f58.jpg',
@@ -57,12 +57,12 @@ const Login = () => {
     } else {
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then((userCredential) => {
-          const user = userCredential.user;
+          // const user = userCredential.user;
           setLoading(false); // Set loading to false after successful login
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
           setErrorMessage('Invalid Login Credentials');
           setLoading(false); // Set loading to false on error
         });
