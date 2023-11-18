@@ -1,29 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { API_OPTIONS } from '../utils/constants';
-import { useDispatch ,useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTrailerVideo } from '../utils/movieSlice';
 
 const useMovieTrailer = (movieId) => {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const trailerVideo = useSelector(store => store.movies.trailerVideo);
+  const trailerVideo = useSelector((store) => store.movies.trailerVideo);
 
+  useEffect(() => {
     const getMovieVideos = async () => {
-        const data = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, API_OPTIONS);
-        // const data = await fetch("https://api.themoviedb.org/3/movie/" + movieId + "/videos?language=en-US", API_OPTIONS);
-        const json = await data.json();
+      const data = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, API_OPTIONS);
+      const json = await data.json();
 
-        const filterData = json.results.filter((video) => video.type === "Trailer");
-        const trailer  = filterData.length ? filterData[0] :json.results[0];
-        dispatch(addTrailerVideo(trailer));
+      const filterData = json.results.filter((video) => video.type === 'Trailer');
+      const trailer = filterData.length ? filterData[0] : json.results[0];
+      dispatch(addTrailerVideo(trailer));
+    };
 
-    }
-    useEffect(() => {
-       !trailerVideo && getMovieVideos();
-    },[trailerVideo]);
-  return (
-    <div>useMovieTrailer</div>
-  )
-}
+    !trailerVideo && getMovieVideos();
+  }, [trailerVideo, dispatch, movieId]); // Include dependencies inside the useEffect dependency array
 
-export default useMovieTrailer
+  return <div>useMovieTrailer</div>;
+};
+
+export default useMovieTrailer;
